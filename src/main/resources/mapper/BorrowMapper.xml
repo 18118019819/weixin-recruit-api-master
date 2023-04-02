@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.BorrowerMapper">
+
+    <resultMap id="BorrowerSelectAll" type="com.example.demo.entity.Borrower">
+        <id column="BorrowerId" jdbcType="INTEGER" property="BorrowerId"/>
+        <result column="BorrowerName" jdbcType="VARCHAR" property="BorrowerName"/>
+    </resultMap>
+
+
+    <insert id="BorrowerInsert">
+        insert into borrower
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="BorrowerId!=null
+">
+                BorrowerId,
+            </if>
+            <if test="BorrowerName!=null
+">
+                BorrowerName,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="BorrowerId!=null
+">
+                #{BorrowerId},
+            </if>
+            <if test="BookName!=null
+">
+                #{BorrowerName}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="BorrowerUpdate">
+        update borrower
+        <set>
+            <if test="BorrowerName!=null">
+                #{BorrowerName}
+            </if>
+        </set>
+        <where>
+            #{BorrowerId}
+        </where>
+    </update>
+
+
+    <delete id="BorrowerDelete">
+        delete from borrower where BorrowerId=#{BorrowerId}
+    </delete>
+
+    <select id="BorrowerSelect" resultMap="BorrowerSelectAll">
+        <include refid="borrowerMemberAll"></include>
+        <where>
+            <if test="BorrowerId!=null">
+                BorrowerId=#{BorrowerId}
+            </if>
+        </where>
+    </select>
+
+    <select id="BorrowerSelectAll"  resultMap="BorrowerSelectAll">
+        <include refid="borrowerMemberAll"></include>
+    </select>
+
+<sql id="borrowerMemberAll">
+    select BorrowerName,BorrowerId from borrower
+</sql>
+
+
+</mapper>

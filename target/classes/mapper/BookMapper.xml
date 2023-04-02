@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.demo.mapper.BookMapper">
+
+    <resultMap id="BookSelectAll" type="com.example.demo.entity.Book">
+        <id column="BookId" jdbcType="INTEGER" property="BookId"/>
+        <result column="BookName" jdbcType="VARCHAR" property="BookName"/>
+        <result column="BookNumber" jdbcType="INTEGER" property="BookNumber"/>
+    </resultMap>
+
+
+
+    <insert id="BookInsert">
+        insert into Book
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="BookId!=null
+">
+                BookId,
+            </if>
+            <if test="BookName!=null
+">
+                BookName,
+            </if>
+            <if test="BookNumber!=null
+">
+                BookNumber
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="BookId!=null
+">
+                #{BookId},
+            </if>
+            <if test="BookName!=null
+">
+                #{BookName},
+            </if>
+            <if test="BookNumber!=null
+">
+                #{BookNumber}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="BookUpdate">
+        update Book
+
+        <set>
+
+            <if test="BookName!=null
+">
+                BookName=#{BookName},
+            </if>
+            <if test="BookNumber!=null
+">
+                BookNumber=#{BookNumber}
+            </if>
+        </set>
+        <where>
+            BookId=#{BookId}
+        </where>
+    </update>
+
+    <delete id="BookDelete">
+        delete from Book where BookId=#{BookId}
+    </delete>
+
+    <select id="BookSelect" resultMap="BookSelectAll">
+        <include refid="bookMemberAll"></include>
+        <where>
+            <if test="BookId!=null">
+                BookId=#{BookId}
+            </if>
+        </where>
+    </select>
+
+    <select id="BookSelectAll"  resultMap="BookSelectAll">
+        <include refid="bookMemberAll"></include>
+    </select>
+
+<sql id="bookMemberAll">
+    select BookId,BookName,BookNumber from book
+</sql>
+
+
+</mapper>

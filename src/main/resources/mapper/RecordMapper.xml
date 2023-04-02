@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.RecordMapper">
+
+    <resultMap id="RecordSelect" type="com.example.demo.entity.Record">
+        <id column="RecordId" jdbcType="INTEGER" property="RecordId"/>
+        <result column="RecordState" jdbcType="TINYINT" property="RecordState"/>
+        <result column="RecordStartTime" jdbcType="DATE" property="RecordStartTime"/>
+        <result column="RecordEndTime" jdbcType="DATE" property="RecordEndTime"/>
+        <result column="BorrowerId" jdbcType="INTEGER" property="BorrowerId"/>
+        <result column="BookId" jdbcType="INTEGER" property="BookId"/>
+        <result column="LastTime" jdbcType="DATE" property="LastTime"/>
+    </resultMap>
+
+    <insert id="RecordInsert">
+        insert into record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="RecordState!=null">
+                RecordState,
+            </if>
+            <if test="RecordStartTime!=null">
+                RecordStartTime,
+            </if>
+            <if test="RecordEndTime!=null">
+                RecordEndTime,
+            </if>
+            <if test="BorrowerId!=null">
+                BorrowerId,
+            </if>
+            <if test="BookId!=null">
+                BookId,
+            </if>
+            <if test="LastTime!=null">
+                LastTime
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="RecordState!=null">
+                #{RecordState},
+            </if>
+            <if test="RecordStartTime!=null">
+                #{RecordStartTime},
+            </if>
+            <if test="RecordEndTime!=null">
+                #{RecordEndTime},
+            </if>
+            <if test="BorrowerId!=null">
+                #{BorrowerId},
+            </if>
+            <if test="BookId!=null">
+                #{BookId},
+            </if>
+            <if test="LastTime!=null">
+                #{LastTime}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="RecordUpdate">
+        update record
+        <set>
+            <if test="RecordState!=null">
+                RecordState=#{RecordState},
+            </if>
+            <if test="RecordStartTime!=null">
+                RecordStartTime=#{RecordStartTime},
+            </if>
+            <if test="RecordEndTime!=null">
+                RecordEndTime=#{RecordEndTime},
+            </if>
+            <if test="BorrowerId!=null">
+                BorrowerId=#{BorrowerId},
+            </if>
+            <if test="BookId!=null">
+                BookId=#{BookId},
+            </if>
+            <if test="LastTime!=null">
+                LastTime=#{LastTime}
+            </if>
+        </set>
+        <where>
+            RecordId=#{RecordId}
+        </where>
+    </update>
+
+    <delete id="RecordDelete">
+        delete from record where RecordId=#{RecordId}
+    </delete>
+
+    <select id="RecordSelect" resultMap="RecordSelect">
+        <include refid="recordMemberAll"> </include>
+         <where>
+             <if test="BookId!=null and BookId!='' ">
+                 BookId=#{BookId}
+             </if>
+             <if test="BorrowerId!=null and BorrowerId!=''">
+                 AND BorrowerId=#{BorrowerId}
+             </if>
+         </where>
+    </select>
+
+    <select id="RecordSelectById" resultMap="RecordSelect">
+        <include refid="recordMemberAll"> </include>
+        <where>
+            <if test="RecordId!=null">
+                RecordId=#{RecordId}
+            </if>
+        </where>
+    </select>
+
+    <select id="RecordSelectAll"  resultMap="RecordSelect">
+        select <include refid="recordMemberAll"> </include> from record
+    </select>
+
+    <sql id="recordMemberAll">
+         RecordId,RecordState,RecordStartTime,RecordEndTime,LastTime,BookId,BorrowerId
+    </sql>
+</mapper>
